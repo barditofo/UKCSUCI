@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join UKC-SUCI | Membership Application</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1B5C54;
+  --teal: #1B5C54;
+  --teal-light: #2A7A70;
+  --sky: #EBF4F3;
+  --cream: #F7FAFA;
+  --text: #1A2E2C;
+  --muted: #6B7A7A;
+  --border: rgba(27,92,84,0.14);
+  --error: #DC2626;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+h1,h2,h3,h4 { font-family:'Manrope',sans-serif; }
+
+.topbar { background:white; border-bottom:1px solid var(--border); padding:0.5rem 5vw; display:flex; align-items:center; justify-content:space-between; }
+.topbar-back { font-size:0.75rem; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:0.4rem; transition:color 0.2s; }
+.topbar-back:hover { color:var(--navy); }
+
+.progress-wrap { background:white; border-bottom:1px solid var(--border); padding:1.25rem 5vw; position:sticky; top:0; z-index:50; }
+.progress-steps { display:flex; align-items:center; max-width:680px; margin:0 auto; }
+.step-indicator { display:flex; align-items:center; gap:0.4rem; flex:1; min-width:0; }
+.step-dot { width:28px; height:28px; border-radius:0; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; flex-shrink:0; transition:all 0.3s; border:2px solid var(--border); background:white; color:var(--muted); font-family:'Manrope',sans-serif; }
+.step-dot.active { background:var(--teal); border-color:var(--teal); color:white; }
+.step-dot.done { background:var(--navy); border-color:var(--navy); color:white; }
+.step-label { font-size:0.65rem; font-weight:500; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'Inter',sans-serif; }
+.step-label.active { color:var(--teal); font-weight:600; }
+.step-label.done { color:var(--navy); }
+.step-line { flex:1; height:2px; background:var(--border); margin:0 0.25rem; transition:background 0.3s; flex-shrink:1; min-width:6px; }
+.step-line.done { background:var(--navy); }
+
+.form-layout { display:grid; grid-template-columns:1fr 340px; gap:2.5rem; max-width:1100px; margin:3rem auto; padding:0 5vw 5rem; align-items:start; }
+.form-card { background:white; border:1px solid var(--border); box-shadow:0 4px 24px rgba(0,0,0,0.05); overflow:hidden; }
+.form-card-header { background:var(--navy); padding:2rem 2.5rem; }
+.form-step-tag { font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color:#9CC9C4; font-weight:700; margin-bottom:0.5rem; font-family:'Inter',sans-serif; }
+.form-card-header h2 { font-family:'Manrope',sans-serif; font-weight:800; font-size:1.6rem; color:white; line-height:1.2; }
+.form-card-header p { font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:0.5rem; line-height:1.6; font-family:'Inter',sans-serif; }
+.form-body { padding:2.5rem; }
+
+.type-picker { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:0.5rem; }
+.type-option { border:2px solid var(--border); border-radius:0; padding:1.25rem; cursor:pointer; transition:all 0.25s; position:relative; background:white; }
+.type-option:hover { border-color:var(--teal); background:var(--sky); }
+.type-option.selected { border-color:var(--teal); background:var(--sky); }
+.type-option.selected::after { content:'✓'; position:absolute; top:0.6rem; right:0.8rem; font-size:0.75rem; font-weight:700; color:var(--teal); }
+.type-option input { display:none; }
+.type-badge { font-size:0.55rem; letter-spacing:0.15em; text-transform:uppercase; font-weight:700; color:var(--teal); margin-bottom:0.4rem; font-family:'Inter',sans-serif; }
+.type-option h4 { font-family:'Manrope',sans-serif; font-weight:700; font-size:0.88rem; color:var(--navy); margin-bottom:0.3rem; }
+.type-option p { font-size:0.7rem; color:var(--muted); line-height:1.5; font-family:'Inter',sans-serif; }
+.type-popular { position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--navy); color:white; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.2rem 0.7rem; font-weight:700; white-space:nowrap; font-family:'Inter',sans-serif; }
+
+.form-section { margin-bottom:2rem; }
+.form-section-title { font-family:'Manrope',sans-serif; font-weight:700; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--navy); margin-bottom:1.25rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.form-group { margin-bottom:1.25rem; }
+.form-group:last-child { margin-bottom:0; }
+label { display:block; font-size:0.74rem; font-weight:600; color:var(--navy); margin-bottom:0.45rem; font-family:'Inter',sans-serif; }
+label .req { color:var(--teal); margin-left:2px; }
+label .hint { font-weight:400; color:var(--muted); font-size:0.68rem; margin-left:0.3rem; }
+.form-control { width:100%; padding:0.7rem 1rem; border:1.5px solid var(--border); border-radius:0; font-size:0.84rem; font-family:'Inter',sans-serif; color:var(--text); background:white; transition:border-color 0.2s, box-shadow 0.2s; outline:none; }
+.form-control:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(27,92,84,0.1); }
+.form-control::placeholder { color:#bcc0cc; }
+textarea.form-control { resize:vertical; min-height:100px; line-height:1.6; }
+select.form-control { appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A7A' stroke-width='1.5' fill='none' stroke-linecap='square'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 1rem center; padding-right:2.5rem; }
+
+.check-group { display:flex; flex-direction:column; gap:0.75rem; }
+.check-item { display:flex; align-items:flex-start; gap:0.75rem; cursor:pointer; }
+.check-item input[type=checkbox] { width:18px; height:18px; accent-color:var(--teal); flex-shrink:0; margin-top:1px; cursor:pointer; }
+.check-item-label { font-size:0.8rem; color:var(--text); line-height:1.55; font-family:'Inter',sans-serif; }
+.check-item-label strong { color:var(--navy); display:block; margin-bottom:0.15rem; font-size:0.82rem; font-family:'Manrope',sans-serif; }
+.check-item-label span { color:var(--muted); font-size:0.73rem; }
+
+.consent-block { background:var(--sky); padding:1.5rem; margin-top:1.5rem; }
+.consent-block p { font-size:0.75rem; color:var(--muted); line-height:1.65; margin-bottom:1rem; font-family:'Inter',sans-serif; }
+
+.form-nav { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 2.5rem; border-top:1px solid var(--border); background:var(--cream); }
+.btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.65rem 1.5rem; border-radius:0; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.25s; font-family:'Inter',sans-serif; border:none; text-decoration:none; letter-spacing:0.03em; }
+.btn-primary { background:var(--teal); color:white; }
+.btn-primary:hover { background:var(--teal-light); }
+.btn-outline { background:transparent; color:var(--navy); border:1.5px solid var(--border); }
+.btn-outline:hover { border-color:var(--navy); background:white; }
+.btn-navy { background:var(--navy); color:white; }
+.btn-navy:hover { background:#134840; }
+.btn-navy:disabled { opacity:0.6; cursor:not-allowed; }
+.step-counter { font-size:0.72rem; color:var(--muted); font-weight:500; font-family:'Inter',sans-serif; }
+
+.sidebar { display:flex; flex-direction:column; gap:1.25rem; position:sticky; top:120px; }
+.sidebar-card { background:white; border:1px solid var(--border); padding:1.5rem; }
+.sidebar-card h4 { font-family:'Manrope',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--navy); margin-bottom:1rem; }
+.feature-check-list { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+.feature-check-list li { font-size:0.76rem; color:var(--muted); display:flex; gap:0.5rem; line-height:1.4; font-family:'Inter',sans-serif; }
+.feature-check-list li::before { content:'–'; color:var(--teal); font-weight:700; flex-shrink:0; }
+.help-link { display:flex; align-items:center; gap:0.5rem; font-size:0.76rem; color:var(--teal); text-decoration:none; font-weight:600; margin-top:0.5rem; font-family:'Inter',sans-serif; }
+
+.form-step { display:none; }
+.form-step.active { display:block; }
+
+.success-screen { display:none; text-align:center; padding:4rem 2.5rem; }
+.success-screen.show { display:block; }
+.success-icon { width:72px; height:72px; background:var(--sky); display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; }
+.success-icon svg { width:32px; height:32px; stroke:var(--teal); }
+.success-screen h2 { font-family:'Manrope',sans-serif; font-weight:800; font-size:2rem; color:var(--navy); margin-bottom:0.75rem; }
+.success-screen p { font-size:0.88rem; color:var(--muted); max-width:45ch; margin:0 auto 2rem; line-height:1.75; font-family:'Inter',sans-serif; }
+
+#form-error { display:none; margin-top:1rem; padding:1rem; background:#FEF2F2; border-left:3px solid var(--error); font-size:0.78rem; color:var(--error); font-family:'Inter',sans-serif; }
+
+@media (max-width:900px) {
+  .form-layout { grid-template-columns:1fr; }
+  .sidebar { position:static; }
+  .type-picker { grid-template-columns:1fr; }
+  .form-row { grid-template-columns:1fr; }
+}
+@media (max-width:560px) {
+  .step-label { display:none; }
+  .step-dot { width:32px; height:32px; font-size:0.75rem; }
+  .progress-wrap { padding:1rem 4vw; }
+  .step-line { margin:0 0.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="https://www.ukcsuci.org.uk/">
+    <img src="https://cdn.prod.website-files.com/696039a5d62b8aec0b139443/6a2c5ef373f6c958f8677e8a_uk.svg" alt="UKC-SUCI" style="height:60px;width:auto;display:block;margin:-8px 0;">
+  </a>
+  <a href="https://www.ukcsuci.org.uk/" class="topbar-back">Back to UKC-SUCI</a>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step-indicator"><div class="step-dot active" id="dot-1">1</div><div class="step-label active" id="label-1">Membership Type</div></div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step-indicator"><div class="step-dot" id="dot-2">2</div><div class="step-label" id="label-2">Your Details</div></div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step-indicator"><div class="step-dot" id="dot-3">3</div><div class="step-label" id="label-3">About Your Work</div></div>
+    <div class="step-line" id="line-3"></div>
+    <div class="step-indicator"><div class="step-dot" id="dot-4">4</div><div class="step-label" id="label-4">Confirm and Submit</div></div>
+  </div>
+</div>
+
+<div class="form-layout">
+  <div class="form-card">
+
+    <!-- STEP 1 -->
+    <div class="form-step active" id="step-1">
+      <div class="form-card-header">
+        <div class="form-step-tag">Step 1 of 4</div>
+        <h2>Choose your membership type</h2>
+        <p>Select the membership that best fits your role in the SUCI ecosystem.</p>
+      </div>
+      <div class="form-body">
+        <div class="type-picker">
+          <label class="type-option" onclick="selectType(this,'individual')">
+            <input type="radio" name="membership_type" value="Individual Member">
+            <div class="type-badge">Individual</div>
+            <h4>Individual Member</h4>
+            <p>For academics, practitioners, researchers, and SUCI leads joining in a personal capacity.</p>
+          </label>
+          <label class="type-option" onclick="selectType(this,'hei')" style="position:relative;">
+            <span class="type-popular">Most Popular</span>
+            <input type="radio" name="membership_type" value="HEI Membership">
+            <div class="type-badge">Institutional</div>
+            <h4>HEI Membership</h4>
+            <p>For universities and colleges — full institutional access for all staff.</p>
+          </label>
+          <label class="type-option" onclick="selectType(this,'suci')">
+            <input type="radio" name="membership_type" value="Service User & Carer">
+            <div class="type-badge">Lived Experience</div>
+            <h4>Service User and Carer</h4>
+            <p>For service users and carers contributing to health and social care education.</p>
+          </label>
+          <label class="type-option" onclick="selectType(this,'associate')">
+            <input type="radio" name="membership_type" value="Associate Member">
+            <div class="type-badge">Associate</div>
+            <h4>Associate Member</h4>
+            <p>For NHS Trusts, VCSEs, professional bodies, and partner organisations.</p>
+          </label>
+        </div>
+        <div style="margin-top:1.5rem;padding:1.25rem;background:var(--sky);font-size:0.78rem;color:var(--muted);line-height:1.65;font-family:'Inter',sans-serif;">
+          Not sure which to choose? If you're an academic at a university, select Individual or HEI. If you're a service user or carer involved in teaching, select Service User and Carer. <a href="https://www.ukcsuci.org.uk/" style="color:var(--teal);">Learn more</a>
+        </div>
+      </div>
+      <div class="form-nav">
+        <span class="step-counter">Step 1 of 4</span>
+        <button class="btn btn-primary" onclick="goToStep(2)">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="form-step" id="step-2">
+      <div class="form-card-header">
+        <div class="form-step-tag">Step 2 of 4</div>
+        <h2>Your personal details</h2>
+        <p>Tell us about yourself so we can set up your membership account.</p>
+      </div>
+      <div class="form-body">
+        <div class="form-section">
+          <div class="form-section-title">Personal Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name <span class="req">*</span></label>
+              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="e.g. Sarah">
+            </div>
+            <div class="form-group">
+              <label>Last Name <span class="req">*</span></label>
+              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="e.g. Johnson">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Title <span class="hint">(optional)</span></label>
+            <select class="form-control" name="title">
+              <option value="">Select title</option>
+              <option>Dr</option><option>Prof</option><option>Mr</option><option>Mrs</option><option>Ms</option><option>Mx</option><option>Other / prefer not to say</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Pronouns <span class="hint">(optional)</span></label>
+            <select class="form-control" name="pronouns">
+              <option value="">Select or leave blank</option>
+              <option>She / Her</option><option>He / Him</option><option>They / Them</option><option>Other / prefer not to say</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Set Your Password</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Password <span class="req">*</span></label>
+              <input type="password" class="form-control" id="password" placeholder="Min. 8 characters">
+            </div>
+            <div class="form-group">
+              <label>Confirm Password <span class="req">*</span></label>
+              <input type="password" class="form-control" id="confirm_password" placeholder="Repeat password">
+            </div>
+          </div>
+          <p style="font-size:0.72rem;color:var(--muted);margin-top:0.25rem;line-height:1.6;font-family:'Inter',sans-serif;">You will use this password to log in to your member dashboard.</p>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Contact Details</div>
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="your@email.ac.uk">
+          </div>
+          <div class="form-group">
+            <label>Confirm Email <span class="req">*</span></label>
+            <input type="email" class="form-control" id="confirm_email" placeholder="Confirm your email address">
+          </div>
+          <div class="form-group">
+            <label>Phone Number <span class="hint">(optional)</span></label>
+            <input type="tel" class="form-control" name="phone" placeholder="+44 7700 000000">
+          </div>
+          <div class="form-group">
+            <label>Country of Residence <span class="req">*</span></label>
+            <select class="form-control" name="country">
+              <option value="">Select country</option>
+              <option selected>United Kingdom</option><option>Ireland</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-nav">
+        <button class="btn btn-outline" onclick="goToStep(1)">Back</button>
+        <span class="step-counter">Step 2 of 4</span>
+        <button class="btn btn-primary" onclick="goToStep(3)">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="form-step" id="step-3">
+      <div class="form-card-header">
+        <div class="form-step-tag">Step 3 of 4</div>
+        <h2>About your role and context</h2>
+        <p>This helps us tailor your membership and connect you with the most relevant resources.</p>
+      </div>
+      <div class="form-body">
+        <div class="form-section">
+          <div class="form-section-title">Organisation and Role</div>
+          <div class="form-group">
+            <label>Organisation / Institution <span class="req">*</span></label>
+            <input type="text" class="form-control" id="organisation" name="organisation" placeholder="e.g. University of Manchester">
+          </div>
+          <div class="form-group">
+            <label>Department / School <span class="hint">(optional)</span></label>
+            <input type="text" class="form-control" name="department" placeholder="e.g. School of Health Sciences">
+          </div>
+          <div class="form-group">
+            <label>Job Title / Role <span class="req">*</span></label>
+            <input type="text" class="form-control" id="job_title" name="job_title" placeholder="e.g. Senior Lecturer, SUCI Lead">
+          </div>
+          <div class="form-group">
+            <label>Primary Role in SUCI <span class="req">*</span></label>
+            <select class="form-control" name="suci_role">
+              <option value="">Select your primary role</option>
+              <option>Academic / Lecturer</option><option>SUCI Lead / Coordinator</option><option>Researcher</option>
+              <option>Service User / Lived-Experience Educator</option><option>Carer / Lived-Experience Educator</option>
+              <option>Student</option><option>HEI Senior Leader</option><option>NHS / Healthcare Professional</option>
+              <option>VCSE Representative</option><option>Policy / Regulatory Body</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Professional Discipline <span style="font-weight:400;font-size:0.68rem;text-transform:none;letter-spacing:0;">(select all that apply)</span></div>
+          <div class="check-group" style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+            <label class="check-item"><input type="checkbox" name="discipline" value="Nursing"><span class="check-item-label">Nursing</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Midwifery"><span class="check-item-label">Midwifery</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Social Work"><span class="check-item-label">Social Work</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Occupational Therapy"><span class="check-item-label">Occupational Therapy</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Physiotherapy"><span class="check-item-label">Physiotherapy</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Medicine"><span class="check-item-label">Medicine</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Paramedic Science"><span class="check-item-label">Paramedic Science</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Mental Health"><span class="check-item-label">Mental Health</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Dietetics / Nutrition"><span class="check-item-label">Dietetics / Nutrition</span></label>
+            <label class="check-item"><input type="checkbox" name="discipline" value="Other Allied Health"><span class="check-item-label">Other Allied Health</span></label>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Areas of Interest <span style="font-weight:400;font-size:0.68rem;text-transform:none;letter-spacing:0;">(select all that apply)</span></div>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" name="interests" value="Standards & Guidance"><span class="check-item-label"><strong>Standards and Guidance</strong><span>Accessing and implementing the UKC-SUCI Standards Framework</span></span></label>
+            <label class="check-item"><input type="checkbox" name="interests" value="Training & CPD"><span class="check-item-label"><strong>Training and CPD</strong><span>Professional development for myself or my team</span></span></label>
+            <label class="check-item"><input type="checkbox" name="interests" value="Research & Evidence"><span class="check-item-label"><strong>Research and Evidence</strong><span>Contributing to or accessing the SUCI evidence base</span></span></label>
+            <label class="check-item"><input type="checkbox" name="interests" value="Community of Practice"><span class="check-item-label"><strong>Community of Practice</strong><span>Peer networking, roundtables, and community learning</span></span></label>
+            <label class="check-item"><input type="checkbox" name="interests" value="Policy & Advocacy"><span class="check-item-label"><strong>Policy and Advocacy</strong><span>Influencing national SUCI policy and PSRB requirements</span></span></label>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">How Did You Hear About Us?</div>
+          <div class="form-group">
+            <select class="form-control" name="referral_source">
+              <option value="">Select one</option>
+              <option>Colleague / word of mouth</option><option>LinkedIn</option><option>Conference or event</option>
+              <option>Email / newsletter</option><option>Professional body or PSRB</option><option>Online search</option>
+              <option>Academic journal or publication</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Anything else you'd like to tell us? <span class="hint">(optional)</span></label>
+            <textarea class="form-control" name="additional_info" placeholder="E.g. a specific challenge you're facing, what you hope to get from membership..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-nav">
+        <button class="btn btn-outline" onclick="goToStep(2)">Back</button>
+        <span class="step-counter">Step 3 of 4</span>
+        <button class="btn btn-primary" onclick="goToStep(4)">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="form-step" id="step-4">
+      <div class="form-card-header">
+        <div class="form-step-tag">Step 4 of 4</div>
+        <h2>Review and submit</h2>
+        <p>Please confirm your consent and submit your membership application.</p>
+      </div>
+      <div class="form-body" id="step4-body">
+        <div class="form-section">
+          <div class="form-section-title">Membership Summary</div>
+          <div style="background:var(--sky);padding:1.5rem;display:flex;flex-direction:column;gap:0.6rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-family:'Inter',sans-serif;">
+              <span style="color:var(--muted);">Membership Type</span>
+              <strong style="color:var(--navy);" id="summary-type-label">—</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-family:'Inter',sans-serif;">
+              <span style="color:var(--muted);">Name</span>
+              <strong style="color:var(--navy);" id="summary-name">—</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-family:'Inter',sans-serif;">
+              <span style="color:var(--muted);">Email</span>
+              <strong style="color:var(--navy);" id="summary-email">—</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-family:'Inter',sans-serif;">
+              <span style="color:var(--muted);">Organisation</span>
+              <strong style="color:var(--navy);" id="summary-org">—</strong>
+            </div>
+          </div>
+          <p style="font-size:0.72rem;color:var(--muted);margin-top:0.75rem;line-height:1.6;font-family:'Inter',sans-serif;">All UKC-SUCI memberships are currently free. Once submitted, our team will review your application and be in touch within 2-3 working days.</p>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Communication Preferences</div>
+          <div class="check-group">
+            <label class="check-item"><input type="checkbox" name="comms_newsletter" value="Yes" checked><span class="check-item-label"><strong>UKC-SUCI Newsletter</strong><span>News, events, publications, and opportunities — sent monthly</span></span></label>
+            <label class="check-item"><input type="checkbox" name="comms_cpd" value="Yes" checked><span class="check-item-label"><strong>Training and CPD Updates</strong><span>Notifications about upcoming workshops, webinars, and programmes</span></span></label>
+            <label class="check-item"><input type="checkbox" name="comms_research" value="Yes"><span class="check-item-label"><strong>Research and Publications</strong><span>Alerts when new research, briefings, or case studies are published</span></span></label>
+            <label class="check-item"><input type="checkbox" name="comms_policy" value="Yes"><span class="check-item-label"><strong>Policy and Consultations</strong><span>Updates on national SUCI policy developments and consultation opportunities</span></span></label>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Declaration</div>
+          <div class="consent-block">
+            <p>By submitting this application, you confirm the following.</p>
+            <div class="check-group">
+              <label class="check-item"><input type="checkbox" id="consent-accurate" name="consent_accuracy" value="Agreed"><span class="check-item-label">I confirm that the information provided is accurate and complete to the best of my knowledge. <span style="color:var(--error);">*</span></span></label>
+            </div>
+          </div>
+        </div>
+        <div id="form-error">Something went wrong. Please try again or email us at <a href="mailto:info@ukcsuci.org.uk" style="color:var(--error);">info@ukcsuci.org.uk</a>.</div>
+      </div>
+
+      <div class="success-screen" id="success-screen">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="square"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h2>Application Received</h2>
+        <p>Your account is ready. You can log in now using the email and password you just set.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1rem;">
+          <a href="https://member.ukcsuci.org.uk" class="btn btn-navy">Log In Now</a>
+          <a href="https://www.ukcsuci.org.uk/" class="btn btn-outline">Back to UKC-SUCI</a>
+        </div>
+      </div>
+
+      <div class="form-nav" id="step4-nav">
+        <button class="btn btn-outline" onclick="goToStep(3)">Back</button>
+        <span class="step-counter">Step 4 of 4</span>
+        <button class="btn btn-navy" id="submit-btn" onclick="submitForm()">Submit Application</button>
+      </div>
+    </div>
+
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h4>What You'll Get</h4>
+      <ul class="feature-check-list" id="sidebar-features">
+        <li>Full Standards Framework access</li>
+        <li>Community of practice membership</li>
+        <li>CPD event discounts</li>
+        <li>Research hub access</li>
+        <li>Member newsletter</li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h4>Safe and Confidential</h4>
+      <p style="font-size:0.76rem;color:var(--muted);line-height:1.65;margin-bottom:0.75rem;font-family:'Inter',sans-serif;">Your data is handled in line with UK GDPR and our Privacy Policy. We will never share your information without your consent.</p>
+      <p style="font-size:0.72rem;color:var(--muted);font-family:'Inter',sans-serif;">Secure application — UK GDPR compliant</p>
+    </div>
+    <div class="sidebar-card">
+      <h4>Need Help?</h4>
+      <p style="font-size:0.76rem;color:var(--muted);line-height:1.65;margin-bottom:0.75rem;font-family:'Inter',sans-serif;">If you have questions about the application or aren't sure which membership is right for you, get in touch.</p>
+      <a href="mailto:info@ukcsuci.org.uk" class="help-link">Contact our team</a>
+      <a href="https://www.ukcsuci.org.uk/" class="help-link" style="margin-top:0.25rem;">Back to UKC-SUCI</a>
+    </div>
+  </aside>
+</div>
+
+<script>
+let selectedType = null;
+const typeLabels = { individual:'Individual Member', hei:'HEI Membership', suci:'Service User & Carer', associate:'Associate Member' };
+const typeFeatures = {
+  individual:['Standards library access','Community of practice','Member newsletter','CPD event discounts','Research hub access','Voting rights'],
+  hei:['Full standards framework','Implementation toolkit','Staff CPD programmes','Audit and QA tools','Policy influence group','Institutional reporting','Priority support access'],
+  suci:['Lived-Experience Network','Involvement opportunities','Safeguarding guidance','Wellbeing support','Recognition frameworks','Peer support community'],
+  associate:['Partner organisation access','Collaborative research','Event participation','Network access','Resource library']
+};
+
+function selectType(el, type) {
+  document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedType = type;
+  document.getElementById('sidebar-features').innerHTML = typeFeatures[type].map(f => `<li>${f}</li>`).join('');
+  document.getElementById('summary-type-label').textContent = typeLabels[type] || '—';
+}
+
+function goToStep(step) {
+  if (step === 2 && !selectedType) { alert('Please select a membership type to continue.'); return; }
+  if (step === 3) {
+    const fn = document.getElementById('first_name').value.trim();
+    const ln = document.getElementById('last_name').value.trim();
+    const em = document.getElementById('email').value.trim();
+    const cem = document.getElementById('confirm_email').value.trim();
+    const pw = document.getElementById('password').value;
+    const cpw = document.getElementById('confirm_password').value;
+    if (!fn || !ln) { alert('Please enter your first and last name.'); return; }
+    if (!em || !/\S+@\S+\.\S+/.test(em)) { alert('Please enter a valid email address.'); return; }
+    if (em !== cem) { alert('Your email addresses do not match.'); return; }
+    if (!pw || pw.length < 8) { alert('Password must be at least 8 characters.'); return; }
+    if (pw !== cpw) { alert('Your passwords do not match.'); return; }
+    document.getElementById('summary-name').textContent = fn + ' ' + ln;
+    document.getElementById('summary-email').textContent = em;
+  }
+  if (step === 4) {
+    const org = document.getElementById('organisation').value.trim();
+    const job = document.getElementById('job_title').value.trim();
+    if (!org) { alert('Please enter your organisation or institution.'); return; }
+    if (!job) { alert('Please enter your job title or role.'); return; }
+    document.getElementById('summary-org').textContent = org;
+  }
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + step).classList.add('active');
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    const label = document.getElementById('label-' + i);
+    const line = document.getElementById('line-' + i);
+    dot.classList.remove('active','done');
+    label.classList.remove('active','done');
+    if (line) line.classList.remove('done');
+    if (i < step) { dot.classList.add('done'); dot.textContent = '✓'; label.classList.add('done'); if (line) line.classList.add('done'); }
+    else if (i === step) { dot.classList.add('active'); dot.textContent = i; label.classList.add('active'); }
+    else { dot.textContent = i; }
+  }
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+async function submitForm() {
+  if (!document.getElementById('consent-accurate').checked) { alert('Please confirm the declaration before submitting.'); return; }
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+  document.getElementById('form-error').style.display = 'none';
+
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const firstName = document.getElementById('first_name').value.trim();
+  const lastName = document.getElementById('last_name').value.trim();
+  const fullName = firstName + ' ' + lastName;
+
+  const data = {
+    membership_type: document.querySelector('input[name="membership_type"]:checked')?.value || '',
+    title: document.querySelector('select[name="title"]').value,
+    pronouns: document.querySelector('select[name="pronouns"]').value,
+    first_name: firstName, last_name: lastName, email,
+    phone: document.querySelector('input[name="phone"]').value.trim(),
+    country: document.querySelector('select[name="country"]').value,
+    organisation: document.getElementById('organisation').value.trim(),
+    department: document.querySelector('input[name="department"]').value.trim(),
+    job_title: document.getElementById('job_title').value.trim(),
+    suci_role: document.querySelector('select[name="suci_role"]').value,
+    disciplines: [...document.querySelectorAll('input[name="discipline"]:checked')].map(c => c.value).join(', '),
+    interests: [...document.querySelectorAll('input[name="interests"]:checked')].map(c => c.value).join(', '),
+    referral_source: document.querySelector('select[name="referral_source"]').value,
+    additional_info: document.querySelector('textarea[name="additional_info"]').value.trim(),
+    newsletter_opt_in: document.querySelector('input[name="comms_newsletter"]').checked ? 'Yes' : 'No',
+    cpd_updates_opt_in: document.querySelector('input[name="comms_cpd"]').checked ? 'Yes' : 'No',
+    research_updates_opt_in: document.querySelector('input[name="comms_research"]').checked ? 'Yes' : 'No',
+    policy_updates_opt_in: document.querySelector('input[name="comms_policy"]').checked ? 'Yes' : 'No',
+    consent_accuracy: 'Agreed',
+  };
+
+  try {
+    const signupRes = await fetch('https://member.ukcsuci.org.uk/.netlify/identity/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        password,
+        data: { full_name: fullName, membership_type: data.membership_type }
+      })
+    });
+
+    const signupData = await signupRes.json();
+    console.log('Signup response:', signupRes.status, signupData);
+
+    if (!signupRes.ok && !signupData.msg?.toLowerCase().includes('already')) {
+      throw new Error(signupData.msg || signupData.error_description || 'Signup failed');
+    }
+
+    await fetch('https://formspree.io/f/mojzlrle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    showSuccess();
+  } catch(e) {
+    const msg = e.message || e.toString();
+    console.error('Signup error:', msg, e);
+    const errBox = document.getElementById('form-error');
+    errBox.innerHTML = `Something went wrong: <strong>${msg}</strong><br>Please try again or email <a href="mailto:info@ukcsuci.org.uk" style="color:var(--error);">info@ukcsuci.org.uk</a>`;
+    errBox.style.display = 'block';
+    btn.textContent = 'Submit Application';
+    btn.disabled = false;
+  }
+}
+
+function showSuccess() {
+  document.getElementById('step4-nav').style.display = 'none';
+  document.getElementById('step4-body').style.display = 'none';
+  document.querySelector('#step-4 .form-card-header').style.display = 'none';
+  document.getElementById('success-screen').classList.add('show');
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    const label = document.getElementById('label-' + i);
+    const line = document.getElementById('line-' + i);
+    dot.classList.remove('active'); dot.classList.add('done'); dot.textContent = '✓';
+    label.classList.remove('active'); label.classList.add('done');
+    if (line) line.classList.add('done');
+  }
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+</script>
+</body>
+</html>
